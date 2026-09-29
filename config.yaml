@@ -1,0 +1,49 @@
+# Central configuration for the readmission subgroup audit pipeline.
+# Change values here, not in code, to re-run with different settings.
+
+data:
+  path: "data/diabetic_data.csv"
+  target_column: "readmitted"
+  positive_label: "<30"
+  subgroup_columns: ["age", "gender", "race"]
+  drop_columns:
+    - "encounter_id"
+    - "patient_nbr"
+    - "readmitted"
+    - "weight"
+    - "payer_code"
+    - "medical_specialty"
+    - "examide"
+    - "citoglipton"
+
+split:
+  test_size: 0.2
+  random_state: 42
+  group_column: "patient_nbr"   # keep all encounters of a patient on one side of the split (null = plain row split)
+
+audit:
+  n_bootstrap: 1000
+  min_subgroup_n: 100        # subgroups smaller than this are not audited -- too few for a trustworthy CI
+  confidence_level: 0.95
+  n_calibration_bins: 10
+
+mechanism:
+  min_bin_n: 30               # bins smaller than this are excluded from mechanism analysis
+  diagnosis_bin_edges: [1, 2, 3, 4, 5, 6, 7, 8, 9, 100]  # last bin = "9+"/"10+" catch-all
+
+models:
+  baseline:
+    type: "logistic_regression"
+    max_iter: 1000
+    class_weight: null
+  strong:
+    type: "hist_gradient_boosting"   # portable: no external system libraries required (unlike LightGBM)
+    max_iter: 300
+    learning_rate: 0.05
+
+output:
+  figures_dir: "reports/figures"
+  results_dir: "reports/results"
+
+serving:
+  flag_fraction: 0.20        # flag the top 20% highest-risk patients (follow-up capacity)

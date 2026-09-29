@@ -1,0 +1,14 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11", cache: pip}
+      - run: pip install -r requirements.txt
+      - run: python scripts/run_pipeline.py      # reproduces every result from raw data
+      - run: python scripts/build_reports.py     # fails if the audit disagrees with Fairlearn
+      - run: python scripts/simulate_monitoring.py
+      - run: python -m pytest tests -q

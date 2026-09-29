@@ -1,0 +1,5 @@
+data/
+reports/figures/
+tests/
+.venv/
+__pycache__/
