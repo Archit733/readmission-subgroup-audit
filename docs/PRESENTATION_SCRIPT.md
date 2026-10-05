@@ -42,7 +42,7 @@ the claim. The cause of the age gap is still unexplained, and my report says so.
 Then I built what a hospital would need around the audit. A prediction service where every score comes with a
 reliability note. If you score a 92-year-old, it tells you this model is less reliable for that age band. A
 dashboard to explore all of this. And monitoring. On a simulated data stream, input drift is caught first, and
-performance alerts come later, because real readmission outcomes arrive 30 days late. It has 89 automated tests and
+performance alerts come later, because real readmission outcomes arrive 30 days late. It has 92 automated tests and
 an auto-generated model card.
 
 **[Slide 7: Limits and close. 4:40 to 5:00]**

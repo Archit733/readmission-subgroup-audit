@@ -21,7 +21,7 @@ what happens operationally when it doesn't? The audit is the product; the model 
 | Concern | Implementation |
 |---|---|
 | Reproducibility | `config.yaml` drives everything; seeded; one command per stage; CI runs the whole chain |
-| Correctness | 89 pytest tests; two bugs found and fixed by them (positional best/worst comparison; NaN breaking JSON) |
+| Correctness | 92 pytest tests; two bugs found and fixed by them (positional best/worst comparison; NaN breaking JSON) |
 | Data leakage | patient-level split. 30% of encounters are repeat patients; a naive row split inflated AUC (0.688 to 0.676 once fixed) |
 | Deployability | one sklearn Pipeline (impute, encode, model) so raw records can be scored; unseen categories map to -1, never crash |
 | Independent verification | every subgroup AUC re-computed with Fairlearn `MetricFrame`; build fails if they disagree |
@@ -45,7 +45,7 @@ src/readmit_audit/  data, preprocessing, modeling, audit (bootstrap CI, calibrat
                     mechanism (Charlson), monitoring (PSI, alerts), simulation, serving, api
 scripts/            run_pipeline, build_reports, simulate_monitoring
 app/dashboard.py    six-tab Streamlit explorer
-tests/              89 tests (hermetic API tests use a tiny fitted model, not the full pipeline)
+tests/              92 tests (hermetic API tests use a tiny fitted model, not the full pipeline)
 ```
 
 ## Monitoring simulation: what it does and does not show
@@ -66,6 +66,9 @@ Batches 0-3 are clean; later batches get synthetic drift toward older patients p
   Everything else was run: pipeline, tests, API against a live uvicorn server, dashboard via Streamlit AppTest and a browser screenshot.
 * PSI thresholds (0.10 / 0.25) are industry convention, not tuned to this data.
 * Age is used both as a model feature and as the audited attribute; whether a model should use it is a policy question this project does not settle.
+
+## Running from any folder
+Paths in `config.yaml` resolve relative to the project folder, so a fresh `git clone` works wherever you run the scripts. The dataset is `data/diabetic_data.csv`.
 
 ## Docs
 * `docs/PROJECT_EXPLAINER.md`: the project start to end, component by component

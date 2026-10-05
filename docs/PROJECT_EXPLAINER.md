@@ -46,7 +46,7 @@ depend on diabetes.
 | Scoring API | `serving.py`, `api.py` | FastAPI: probability, high-risk flag, per-age-band reliability note; drift-check endpoint; no patient data logged. |
 | Dashboard | `app/dashboard.py` | Six-tab Streamlit explorer. |
 | Monitoring | `monitoring.py`, `simulation.py` | PSI input drift plus per-subgroup performance alerts on a simulated stream. |
-| Tests and docs | `tests/`, `MODEL_CARD.md` | 89 tests; model card generated from the results. |
+| Tests and docs | `tests/`, `MODEL_CARD.md` | 92 tests; model card generated from the results. |
 
 ## Definitions (plain text)
 

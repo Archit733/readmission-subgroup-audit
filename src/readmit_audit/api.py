@@ -6,6 +6,7 @@ Patient records are never logged or stored; only request counts are logged.
 """
 import logging
 import os
+from pathlib import Path
 from contextlib import asynccontextmanager
 from typing import Any, Dict, List
 
@@ -28,7 +29,7 @@ class DriftRequest(BaseModel):
 
 
 def create_app(model_path: str = None) -> FastAPI:
-    path = model_path or os.environ.get("READMIT_MODEL_PATH", "reports/results/model_for_serving.joblib")
+    path = model_path or os.environ.get("READMIT_MODEL_PATH", str(Path(__file__).resolve().parents[2] / "reports" / "results" / "model_for_serving.joblib"))
     state: dict = {}
 
     @asynccontextmanager

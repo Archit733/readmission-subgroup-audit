@@ -30,7 +30,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(na
 logger = logging.getLogger("pipeline")
 
 
-def main(config_path: str):
+def main(config_path=None):
     cfg = load_config(config_path)
     results_dir = Path(cfg["output"]["results_dir"])
     results_dir.mkdir(parents=True, exist_ok=True)
@@ -134,6 +134,6 @@ def main(config_path: str):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", default="config.yaml")
+    parser.add_argument("--config", default=None)
     args = parser.parse_args()
     main(args.config)

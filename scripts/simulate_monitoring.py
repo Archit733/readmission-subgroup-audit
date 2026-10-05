@@ -87,5 +87,5 @@ def main(config_path, n_batches=10, clean_batches=4, window=3):
 
 
 if __name__ == "__main__":
-    ap = argparse.ArgumentParser(); ap.add_argument("--config", default="config.yaml"); ap.add_argument("--window", type=int, default=3)
+    ap = argparse.ArgumentParser(); ap.add_argument("--config", default=None); ap.add_argument("--window", type=int, default=3)
     a = ap.parse_args(); main(a.config, window=a.window)

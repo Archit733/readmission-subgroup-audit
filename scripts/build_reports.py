@@ -181,10 +181,10 @@ Subgroup AUCs independently cross-checked against Fairlearn `MetricFrame`: all g
 Monitor per-subgroup recall and drift after deployment (`readmit_audit.monitoring`); surface a reliability
 warning for age bands where the model is weakest (`/predict` response); re-audit on local data before use.
 """
-    Path("MODEL_CARD.md").write_text(card)
+    (Path(cfg["_root"]) / "MODEL_CARD.md").write_text(card)
     log.info("Wrote figures and MODEL_CARD.md")
 
 
 if __name__ == "__main__":
-    ap = argparse.ArgumentParser(); ap.add_argument("--config", default="config.yaml")
+    ap = argparse.ArgumentParser(); ap.add_argument("--config", default=None)
     main(ap.parse_args().config)
