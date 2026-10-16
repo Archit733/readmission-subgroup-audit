@@ -1,0 +1,58 @@
+
+4. PER-BAND PERMUTATION IMPORTANCE (GBM; drop in within-band AUC when one feature is shuffled)
+band                         <40   40-59   60-79     80+  sum_all
+feature                                                          
+discharge_disposition_id  0.0151  0.0597  0.0824  0.0650   0.2222
+number_inpatient          0.0444  0.0254  0.0182  0.0204   0.1084
+dg1                       0.0215  0.0184  0.0101  0.0058   0.0559
+dg2                       0.0038  0.0065  0.0031  0.0017   0.0152
+specialty                 0.0198  0.0056  0.0078  0.0072   0.0404
+time_in_hospital          0.0054  0.0044  0.0052  0.0066   0.0216
+num_medications          -0.0008  0.0040  0.0027 -0.0007   0.0052
+number_diagnoses          0.0131  0.0040  0.0013  0.0014   0.0199
+diabetesMed               0.0069  0.0035  0.0040  0.0083   0.0228
+num_lab_procedures        0.0080  0.0030  0.0037  0.0042   0.0188
+metformin                 0.0027  0.0020 -0.0003 -0.0026   0.0018
+number_emergency          0.0012  0.0019  0.0021  0.0034   0.0086
+admission_type_id        -0.0010  0.0018  0.0022  0.0025   0.0056
+number_outpatient        -0.0018  0.0017 -0.0005 -0.0009  -0.0016
+dg3                       0.0019  0.0015  0.0013 -0.0004   0.0044
+   total importance mass per band: {'<40': 0.157, '40-59': 0.1495, '60-79': 0.1511, '80+': 0.1398}
+
+   single-feature AUC within band (direction-free, |AUC-0.5|+0.5)
+           feature   <40  40-59  60-79   80+
+  number_inpatient 0.606  0.544  0.544 0.543
+  number_emergency 0.549  0.517  0.513 0.507
+ number_outpatient 0.526  0.512  0.508 0.504
+  time_in_hospital 0.532  0.563  0.557 0.539
+   num_medications 0.557  0.560  0.536 0.525
+  number_diagnoses 0.589  0.562  0.528 0.500
+num_lab_procedures 0.553  0.541  0.533 0.512
+
+   prior inpatient visits by band (share with >=1, mean)
+          share_ge1   mean
+age_band                  
+<40           0.092  0.169
+40-59         0.105  0.162
+60-79         0.123  0.180
+80+           0.128  0.189
+
+saved results/p3_*.csv
+
+3. k-NN SEPARABILITY WITHIN BAND AT MATCHED n (model-light estimate of how much the features separate outcomes)
+band         40-59  60-79    80+    <40
+n_match k                              
+4500    10   0.530  0.535  0.526  0.636
+        25   0.545  0.531  0.531  0.687
+        50   0.565  0.542  0.536  0.681
+        100  0.574  0.550  0.550  0.695
+12871   10   0.550  0.547  0.525    NaN
+        25   0.555  0.574  0.540    NaN
+        50   0.563  0.586  0.546    NaN
+        100  0.582  0.593  0.556    NaN
+
+saved results/p3_*.csv
+
+real	3m28.980s
+user	4m34.061s
+sys	0m2.323s

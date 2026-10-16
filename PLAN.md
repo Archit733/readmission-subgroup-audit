@@ -72,4 +72,16 @@ Conditions: (A) all encounters, random row-level 80/20 split (the capstone's des
 Report AUC(80+) and delta for each, paired CIs against the baseline model.
 
 ## Deviations
-(none yet)
+All logged on 2026-10-17. None changes a pre-specified estimand, threshold or decision rule;
+each addition is labelled "exploratory" wherever it is reported.
+
+1. Phase 1: the 10-year-bucket table (secondary) uses a 500-replicate row bootstrap instead of 2000.
+2. Phase 2.3: added the reverse reweighting (80+ reweighted to the 40-59 case mix). Exploratory.
+   The pre-specified test (40-59 reweighted to the 80+ mix) is reported as the primary case-mix result.
+3. Phase 3.1: 3 subsampling repeats per training fraction instead of 5 (compute: two CPU cores).
+   The LightGBM power-law fits hit their parameter bounds and are not interpreted; the
+   pre-specified gain criterion (fraction 0.5 -> 1.0) is used instead.
+4. Phase 3.3: k in {10, 25, 50, 100} instead of {5, 10, 25}; with a 7-11% outcome rate, k = 5
+   gives almost no positives per neighbourhood. Run at two matched sizes (12,871 and 4,500).
+5. Phase 3.4: added single-feature within-band AUCs and a check of the diagnosis-count ceiling. Exploratory.
+6. Phase 4.4: added geriatric-syndrome flags derived from the three recorded diagnosis codes. Exploratory.
