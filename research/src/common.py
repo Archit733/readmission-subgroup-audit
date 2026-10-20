@@ -17,7 +17,7 @@ from sklearn.preprocessing import OneHotEncoder, StandardScaler
 warnings.filterwarnings("ignore", category=UserWarning)
 
 ROOT = Path(__file__).resolve().parents[1]
-DATA = ROOT / "data" / "diabetic_data.csv"
+DATA = ROOT.parent / "data" / "diabetic_data.csv"  # the repository's shared copy
 RESULTS = ROOT / "results"
 FIGURES = ROOT / "figures"
 

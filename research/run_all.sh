@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Reproduces every number and figure. About 25 minutes on two CPU cores.
-# Expects data/diabetic_data.csv (UCI Diabetes 130-US Hospitals, 101,766 rows).
+# Reads ../data/diabetic_data.csv, the copy already in this repository.
 set -euo pipefail
 cd "$(dirname "$0")"
 mkdir -p results figures
