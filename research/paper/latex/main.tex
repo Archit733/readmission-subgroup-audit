@@ -1,43 +1,60 @@
-\documentclass[11pt]{article}
-\usepackage[margin=1in]{geometry}
-\usepackage{mathptmx}
+\pdfoutput=1
+\documentclass{article}
 
-\usepackage{microtype}
+\usepackage{arxiv}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{courier}
 \usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{microtype}
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage[numbers,sort&compress]{natbib}
-\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
+\usepackage{hyperref}
+\usepackage{url}
 \usepackage{caption}
 \captionsetup{font=small,labelfont=bf}
 \usepackage{enumitem}
-\usepackage{float}
 \setlist{itemsep=2pt,topsep=4pt}
+\usepackage{float}
 
-\newcommand{\ci}[2]{\,[#1,\,#2]}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!50!black,
+  citecolor=blue!50!black,
+  urlcolor=blue!50!black,
+  pdftitle={Readmission Models Discriminate Worse for the Oldest Patients},
+  pdfauthor={Archit Bhatia},
+  pdfkeywords={subgroup evaluation, hospital readmission, algorithmic fairness, age, pre-registration, clinical machine learning}
+}
+
+\newcommand{\ci}[2]{\,\mbox{[#1,\,#2]}}
 
 \title{Readmission Models Discriminate Worse for the Oldest Patients, and Neither More Data nor a Bigger Model Closes the Gap: A Pre-Registered Patient-Level Audit of the Diabetes 130-US Hospitals Benchmark}
-\author{Archit Bhatia\\Plaksha University\\\texttt{architbhatia570@gmail.com}}
+
+\author{
+  Archit Bhatia \\
+  Plaksha University\\
+  Mohali, Punjab, India \\
+  \texttt{architbhatia570@gmail.com}
+}
+
+\renewcommand{\shorttitle}{Age Gap in Readmission-Model Discrimination}
+\renewcommand{\headeright}{Preprint}
+\renewcommand{\undertitle}{Preprint}
 \date{}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-Aggregate discrimination can hide subgroup failures. We ask whether a standard 30-day readmission model discriminates equally well across age, and if not, why. On the UCI Diabetes 130-US Hospitals data (first encounter per patient, deaths and hospice discharges excluded; $n = 69{,}990$), logistic regression reaches an overall AUC of 0.648. AUC is 0.647 for patients aged 40--59 and 0.603 for patients aged 80 and over, a gap of 0.044 (paired patient-level bootstrap 95\% CI 0.021 to 0.066); LightGBM gives 0.036 (0.013 to 0.059).
-
-An encounter-level analysis of the same data roughly doubles the gap. Most of that inflation comes from repeat admitters, who are easy to predict and over-represented among younger patients, not from train--test leakage.
-
-Following a plan committed before any result was computed, we rule out several explanations:
-\begin{itemize}
-  \item \emph{Outcome rarity}: readmission is more common in the oldest band.
-  \item \emph{Outcome definition}: the gap persists under alternative label definitions.
-  \item \emph{Sample size}: learning curves run parallel, and the gap remains at equal training size.
-  \item \emph{Model capacity}: four model classes, including explicit age-by-feature interactions, give the same gap.
-\end{itemize}
-The deficit is localised to the part of feature space occupied mainly by the oldest patients. Band-specific models, reweighting, finer diagnosis codes and geriatric-syndrome flags do not raise their AUC. Calibration-in-the-large holds at every age, but the calibration slope for the 80+ band is 0.72 (0.62 to 0.82). We conclude that the gap reflects missing information in these features rather than a deficiency of the learner.
+Aggregate discrimination metrics can hide subgroup failures. We ask whether a standard 30-day readmission model discriminates equally well across age and, if not, why. On the UCI Diabetes 130-US Hospitals data (first encounter per patient, deaths and hospice discharges excluded; $n = 69{,}990$), logistic regression reaches an overall AUC of 0.648, but 0.647 for patients aged 40--59 and 0.603 for those aged 80 and over: a gap of 0.044 (paired patient-level bootstrap 95\% CI 0.021 to 0.066). LightGBM gives 0.036 (0.013 to 0.059). An encounter-level analysis roughly doubles the gap, mostly because repeat admitters are easy to predict, not because of train--test leakage. Following an analysis plan committed before any result was computed, we show that the remaining gap is not explained by outcome rarity, outcome definition, sample size (parallel learning curves; the gap persists at equal training size) or model capacity (four model classes, including explicit age-by-feature interactions). It is confined to the region of feature space occupied mainly by the oldest patients. Band-specific models, reweighting, finer diagnosis codes and geriatric-syndrome flags do not raise their AUC. Calibration-in-the-large holds at every age, but the calibration slope for the 80+ band is 0.72 (0.62 to 0.82). We conclude that the gap reflects missing information in these features rather than a deficiency of the learner, and that results on this benchmark should be reported with age-stratified discrimination and calibration.
 \end{abstract}
+
+\keywords{Subgroup evaluation \and Hospital readmission \and Algorithmic fairness \and Older adults \and Pre-registration \and Clinical machine learning}
 
 \section{Introduction}
 
@@ -143,7 +160,7 @@ In the primary cohort, AUC is roughly flat at about 0.64--0.66 from age 40 to 79
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{figures/fig1_cohort_cleaning.png}
+\includegraphics[width=\linewidth]{figures/fig1_cohort_cleaning}
 \caption{Left: per-band AUC (LR) under designs A--D. Right: the age gap with paired 95\% CIs. Most of the shrinkage comes from keeping one encounter per patient (C$\to$D), not from grouping by patient (A$\to$B).}
 \label{fig:cohort}
 \end{figure}
@@ -172,11 +189,11 @@ LightGBM & 0.675\ci{0.642}{0.708} & 0.650\ci{0.633}{0.665} & 0.647\ci{0.637}{0.6
 \paragraph{Case mix.} A cross-fitted LightGBM model estimates the probability that a patient belongs to the 80+ band rather than 40--59, using every feature except age. It separates the two bands well (AUC 0.86).
 \begin{itemize}
   \item \emph{Pre-specified test.} Reweighting 40--59 patients by the odds of belonging to 80+ (weights truncated at the 99th percentile) does not shrink the gap: $\Delta$ is 0.053\ci{0.018}{0.087} for LR. Middle-aged patients who resemble the elderly are still predicted well.
-  \item \emph{Exploratory reverse test.} Reweighting 80+ patients to the 40--59 case mix removes the gap: $\Delta$ is $-0.003$\ci{-0.039}{0.034}.
+  \item \emph{Exploratory reverse test.} Reweighting 80+ patients to the 40--59 case mix removes the gap: $\Delta$ is $-0.003$\ci{$-$0.039}{0.034}.
 \end{itemize}
 The deficit is therefore confined to the region of feature space occupied mainly by the elderly. Overlap is limited (effective sample sizes 3,183 to 3,695), so the reweighted estimates describe the region where the two bands overlap.
 
-\paragraph{Discharge destination.} 31.5\% of 80+ patients are discharged to a skilled nursing facility, against 3.6\% of 40--59 patients. Within each destination the gap shrinks, and its CI includes zero for home discharges (LR 0.021\ci{-0.015}{0.057}) and for skilled nursing (0.022\ci{-0.051}{0.092}). These within-stratum tests are underpowered.
+\paragraph{Discharge destination.} 31.5\% of 80+ patients are discharged to a skilled nursing facility, against 3.6\% of 40--59 patients. Within each destination the gap shrinks, and its CI includes zero for home discharges (LR 0.021\ci{$-$0.015}{0.057}) and for skilled nursing (0.022\ci{$-$0.051}{0.092}). These within-stratum tests are underpowered.
 
 \paragraph{Calibration.} Calibration-in-the-large is close to zero in every band, and the spread of predicted risk is not narrower for 80+ (standard deviation of the predicted logit 0.52 vs.\ 0.48). The calibration slope, however, is 0.72\ci{0.62}{0.82} for 80+ against 1.00\ci{0.92}{1.09} for 40--59. The model separates elderly patients as confidently as younger ones, but those differences in predicted risk overstate the true differences in risk.
 
@@ -186,7 +203,7 @@ The deficit is therefore confined to the region of feature space occupied mainly
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\linewidth]{figures/fig2_learning_curves.png}
+\includegraphics[width=\linewidth]{figures/fig2_learning_curves}
 \caption{Within-band AUC as training size grows (pooled out-of-fold predictions, mean of three subsamples). The curves stay parallel, so more data helps every band about equally and the gap persists.}
 \label{fig:lc}
 \end{figure}
@@ -226,7 +243,7 @@ One variant, LR with 80+ patients weighted by 5, reduced $\Delta$ to 0.029. It d
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.78\linewidth]{figures/fig3_interventions.png}
+\includegraphics[width=0.78\linewidth]{figures/fig3_interventions}
 \caption{Change in AUC for the 80+ band relative to the baseline of the same model family (paired 95\% CIs). No intervention improves it; several LightGBM variants make it worse.}
 \label{fig:int}
 \end{figure}

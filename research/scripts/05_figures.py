@@ -15,7 +15,7 @@ from common import BANDS, FIGURES, RESULTS
 FIGURES.mkdir(exist_ok=True)
 SERIES = {"<40": "#2a78d6", "40-59": "#eb6834", "60-79": "#1baf7a", "80+": "#6250d6"}
 INK, INK2, GRID, SURF = "#0b0b0b", "#52514e", "#e6e5e1", "#fcfcfb"
-plt.rcParams.update({"font.size": 9, "axes.edgecolor": INK2, "axes.labelcolor": INK2,
+plt.rcParams.update({"pdf.fonttype": 42, "font.size": 9, "axes.edgecolor": INK2, "axes.labelcolor": INK2,
                      "xtick.color": INK2, "ytick.color": INK2, "axes.spines.top": False,
                      "axes.spines.right": False, "figure.facecolor": SURF, "axes.facecolor": SURF,
                      "savefig.facecolor": SURF, "axes.grid": True, "grid.color": GRID,
@@ -52,6 +52,7 @@ ax.set_title("Age gap with paired 95% CI", loc="left", fontsize=10, color=INK)
 ax.legend(frameon=False, fontsize=8)
 fig.tight_layout()
 fig.savefig(FIGURES / "fig1_cohort_cleaning.png", dpi=200)
+fig.savefig(FIGURES / "fig1_cohort_cleaning.pdf")
 
 # ---- Figure 2: learning curves -------------------------------------------------
 lc = pd.read_csv(RESULTS / "p3_learning_curves.csv")
@@ -68,10 +69,9 @@ for ax, m, name in [(axes[0], "lr", "Logistic regression"), (axes[1], "gbm", "Li
     ax.set_title(name, loc="left", fontsize=10, color=INK)
     ax.set_xlim(n[0] * 0.8, n[-1] * 1.5)
 axes[0].set_ylabel("Within-band AUC")
-fig.suptitle("Learning curves run parallel: more data lifts every band, the gap stays",
-             x=0.01, ha="left", fontsize=10, color=INK)
 fig.tight_layout()
 fig.savefig(FIGURES / "fig2_learning_curves.png", dpi=200)
+fig.savefig(FIGURES / "fig2_learning_curves.pdf")
 
 # ---- Figure 3: interventions ----------------------------------------------------
 p4 = pd.read_csv(RESULTS / "p4_interventions_paired.csv")
@@ -102,4 +102,5 @@ ax.grid(axis="y", visible=False)
 fig.text(0.01, 0.01, "* compared with the logistic-regression baseline", fontsize=7, color=INK2)
 fig.tight_layout()
 fig.savefig(FIGURES / "fig3_interventions.png", dpi=200)
+fig.savefig(FIGURES / "fig3_interventions.pdf")
 print("saved figures/fig1-3")
