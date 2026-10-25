@@ -1,5 +1,12 @@
 # Readmission Subgroup Audit: from capstone to deployable pipeline
 
+> **Start here.** The latest work is the research extension in [`research/`](research/):
+> a pre-registered, patient-level study of why the model discriminates worse for the oldest patients.
+> Paper: [`research/paper/preprint.pdf`](research/paper/preprint.pdf) ·
+> Plan: [`research/PLAN.md`](research/PLAN.md) ·
+> Results and how to reproduce: [`research/README.md`](research/README.md).
+> The rest of this README describes the deployable pipeline built earlier.
+
 **Question:** a readmission-risk model reports one AUC. Does that number hold for every patient group, and
 what happens operationally when it doesn't? The audit is the product; the model is deliberately ordinary.
 
@@ -74,13 +81,13 @@ Paths in `config.yaml` resolve relative to the project folder, so a fresh `git c
 A pre-registered, patient-level decomposition of the age gap (first encounter per patient, paired patient-level bootstrap).
 The gap survives, at about half the encounter-level size: AUC(40-59) - AUC(80+) = 0.044 [0.021, 0.066]. It is not
 explained by base rate, label definition, sample size or model capacity, and reweighting, band-specific models,
-finer ICD codes and geriatric flags do not close it. See `research/README.md`, `research/PLAN.md` and the paper draft
-`research/paper/draft.md`. Run with `cd research && bash run_all.sh` (about 25 minutes on 2 CPU cores).
+finer ICD codes and geriatric flags do not close it. See [`research/README.md`](research/README.md), [`research/PLAN.md`](research/PLAN.md) and the paper
+[`research/paper/preprint.pdf`](research/paper/preprint.pdf). Run with `cd research && bash run_all.sh` (about 25 minutes on 2 CPU cores).
 
 ## Docs
 * `docs/PROJECT_EXPLAINER.md`: the project start to end, component by component
 * `docs/PRESENTATION_SCRIPT.md`: 5-minute presenter script with likely questions
-* `docs/PUBLICATION_PLAN.md`: honest assessment of publishability, venues, and extension steps
+* `docs/PUBLICATION_PLAN.md`: publishability assessment written before the research extension (superseded by `research/`)
 * `MODEL_CARD.md`: auto-generated from the results
 
 ## Lineage

@@ -1,5 +1,8 @@
 # Publication assessment and plan
 
+> Written on 2026-09-29, before the research extension. The extension steps it recommends were carried out in
+> [`research/`](../research/); the resulting paper is [`research/paper/preprint.pdf`](../research/paper/preprint.pdf).
+
 ## Verdict
 
 As it stands, not suitable for a main-track journal or conference. With about 2 to 3 months of extension, a workshop

@@ -4,7 +4,36 @@
 
 **Answer, in one paragraph.** Yes. In the standard patient-level cohort (first encounter per patient, deaths and hospice excluded; 69,990 patients), AUC is 0.647 for ages 40-59 and 0.603 for 80+, a gap of 0.044 (paired 95% CI 0.021 to 0.066). The usual encounter-level analysis roughly doubles the gap, mainly because of repeat admitters, not leakage. The gap is not explained by outcome rarity, label definition, sample size or model capacity. It sits in the part of feature space occupied by elderly patients, and band-specific models, reweighting, finer ICD codes and geriatric flags do not close it. Calibration-in-the-large is fine for every age, but the calibration slope for 80+ is 0.72.
 
-The full write-up is in `paper/draft.md`. The analysis plan (`PLAN.md`) was committed in 705c5db, before any result was computed, and deviations are logged at its end.
+## Start here
+
+| If you want to... | Open |
+|---|---|
+| Read the paper | [`paper/preprint.pdf`](paper/preprint.pdf) |
+| See the analysis plan, fixed before any result | [`PLAN.md`](PLAN.md) (commit 705c5db; deviations logged at the end) |
+| Check a specific number | [`results/`](results/): one CSV per analysis, plus a log per phase |
+| Reproduce everything | `bash run_all.sh` (instructions below) |
+
+## Key results
+
+| | Logistic regression | LightGBM |
+|---|---|---|
+| AUC, ages 40-59 | 0.647 [0.630, 0.662] | 0.650 [0.633, 0.665] |
+| AUC, ages 80+ | 0.603 [0.587, 0.620] | 0.613 [0.597, 0.630] |
+| Gap (paired 95% CI) | **0.044 [0.021, 0.066]** | **0.036 [0.013, 0.059]** |
+| Gap, encounter-level design (for comparison) | 0.076 [0.040, 0.109] | 0.068 [0.032, 0.100] |
+
+| Explanation tested | Verdict |
+|---|---|
+| Outcome rarity | Ruled out: readmission is more common in 80+ (10.6% vs 7.2%) |
+| Outcome definition | Ruled out: the gap persists under two alternative definitions |
+| Sample size (variance) | Ruled out: parallel learning curves; at equal n the gap is 0.632 vs 0.589 |
+| Model capacity (bias) | Ruled out: four model classes give gaps of 0.036 to 0.048 |
+| Case mix | Gap confined to profiles found mainly among the elderly (exploratory) |
+| Interventions | None raised AUC for 80+ (band-specific models, reweighting, ICD codes, geriatric flags) |
+
+![Gap under four designs](figures/fig1_cohort_cleaning.png)
+![Learning curves](figures/fig2_learning_curves.png)
+![Interventions](figures/fig3_interventions.png)
 
 ## Run
 
@@ -22,6 +51,17 @@ bash run_all.sh        # run from research/; reads ../data/diabetic_data.csv; ab
 | `05_figures.py` | Figures 1-3 | `figures/` |
 
 All shared choices (cohort, bands, features, models, folds, bootstrap) live in `src/common.py`.
+
+```
+research/
+  PLAN.md            pre-registered analysis plan and logged deviations
+  run_all.sh         regenerates every number and figure
+  src/common.py      cohort, features, models, CV, paired bootstrap
+  scripts/           01-05, one script per phase
+  results/           CSV tables and logs for every analysis
+  figures/           figures 1-3 (PNG and vector PDF)
+  paper/             preprint.pdf and its LaTeX source
+```
 
 ## Relation to the capstone
 
