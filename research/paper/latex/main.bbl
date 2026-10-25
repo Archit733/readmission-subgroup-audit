@@ -1,0 +1,101 @@
+\begin{thebibliography}{13}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Al-Zanbouri et~al.(2024)Al-Zanbouri, Sharma, and Raza]{alzanbouri2024}
+Zainab Al-Zanbouri, Gauri Sharma, and Shaina Raza.
+\newblock Equity in healthcare: Analyzing disparities in machine learning
+  predictions of diabetic patient readmissions, 2024.
+
+\bibitem[Chen et~al.(2018)Chen, Johansson, and Sontag]{chen2018}
+Irene Chen, Fredrik~D. Johansson, and David Sontag.
+\newblock Why is my classifier discriminatory?
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~31, 2018.
+
+\bibitem[Clore et~al.(2014)Clore, Cios, DeShazo, and Strack]{uci2014}
+John Clore, Krzysztof Cios, Jon DeShazo, and Beata Strack.
+\newblock Diabetes 130-{US} hospitals for years 1999--2008.
+\newblock UCI Machine Learning Repository, 2014.
+
+\bibitem[{Fairlearn contributors}()]{fairlearn_diabetes}
+{Fairlearn contributors}.
+\newblock Diabetes 130-hospitals dataset.
+\newblock Fairlearn user guide,
+  \url{https://fairlearn.org/main/user_guide/datasets/diabetes_hospital_data.html}.
+\newblock Accessed October 2026.
+
+\bibitem[Kahlon et~al.(2015)Kahlon, Pederson, Majumdar, Belga, Lau, Fradette,
+  Boyko, Bakal, Johnston, Padwal, and McAlister]{kahlon2015}
+Sharry Kahlon, Jenelle Pederson, Sumit~R. Majumdar, Sara Belga, Darren Lau,
+  Miriam Fradette, Debbie Boyko, Jeffrey~A. Bakal, Curtis Johnston, Raj~S.
+  Padwal, and Finlay~A. McAlister.
+\newblock Association between frailty and 30-day outcomes after discharge from
+  hospital.
+\newblock \emph{CMAJ}, 187\penalty0 (11):\penalty0 799--804, 2015.
+
+\bibitem[Kansagara et~al.(2011)Kansagara, Englander, Salanitro, Kagen,
+  Theobald, Freeman, and Kripalani]{kansagara2011}
+Devan Kansagara, Honora Englander, Amanda Salanitro, David Kagen, Cecelia
+  Theobald, Michele Freeman, and Sunil Kripalani.
+\newblock Risk prediction models for hospital readmission: A systematic review.
+\newblock \emph{JAMA}, 306\penalty0 (15):\penalty0 1688--1698, 2011.
+
+\bibitem[Ke et~al.(2017)Ke, Meng, Finley, Wang, Chen, Ma, Ye, and Liu]{ke2017}
+Guolin Ke, Qi~Meng, Thomas Finley, Taifeng Wang, Wei Chen, Weidong Ma, Qiwei
+  Ye, and Tie-Yan Liu.
+\newblock {LightGBM}: A highly efficient gradient boosting decision tree.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~30, 2017.
+
+\bibitem[Lu and Xu(2026)]{luxu2026}
+Haodong Lu and Jian Xu.
+\newblock Fair and robust early readmission risk prediction from electronic
+  health records via diffusion-based data augmentation and causal-invariant
+  representation learning.
+\newblock \emph{Scientific Reports}, 16:\penalty0 22277, 2026.
+
+\bibitem[Obermeyer et~al.(2019)Obermeyer, Powers, Vogeli, and
+  Mullainathan]{obermeyer2019}
+Ziad Obermeyer, Brian Powers, Christine Vogeli, and Sendhil Mullainathan.
+\newblock Dissecting racial bias in an algorithm used to manage the health of
+  populations.
+\newblock \emph{Science}, 366\penalty0 (6464):\penalty0 447--453, 2019.
+
+\bibitem[Pedregosa et~al.(2011)]{pedregosa2011}
+Fabian Pedregosa et~al.
+\newblock Scikit-learn: Machine learning in {P}ython.
+\newblock \emph{Journal of Machine Learning Research}, 12:\penalty0 2825--2830,
+  2011.
+
+\bibitem[Seyyed-Kalantari et~al.(2021)Seyyed-Kalantari, Zhang, McDermott, Chen,
+  and Ghassemi]{seyyed2021}
+Laleh Seyyed-Kalantari, Haoran Zhang, Matthew B.~A. McDermott, Irene~Y. Chen,
+  and Marzyeh Ghassemi.
+\newblock Underdiagnosis bias of artificial intelligence algorithms applied to
+  chest radiographs in under-served patient populations.
+\newblock \emph{Nature Medicine}, 27\penalty0 (12):\penalty0 2176--2182, 2021.
+
+\bibitem[Sokoreli et~al.(2019)Sokoreli, Cleland, Pauws, Steyerberg, de~Vries,
+  Riistama, Dobbs, Bulemfu, and Clark]{sokoreli2019}
+I.~Sokoreli, J.~G. Cleland, S.~C. Pauws, E.~W. Steyerberg, J.~J.~G. de~Vries,
+  J.~M. Riistama, K.~Dobbs, J.~Bulemfu, and A.~L. Clark.
+\newblock Added value of frailty and social support in predicting risk of
+  30-day unplanned re-admission or death for patients with heart failure: An
+  analysis from {OPERA-HF}.
+\newblock \emph{International Journal of Cardiology}, 278:\penalty0 167--172,
+  2019.
+
+\bibitem[Strack et~al.(2014)Strack, DeShazo, Gennings, Olmo, Ventura, Cios, and
+  Clore]{strack2014}
+Beata Strack, Jonathan~P. DeShazo, Chris Gennings, Juan~L. Olmo, Sebastian
+  Ventura, Krzysztof~J. Cios, and John~N. Clore.
+\newblock Impact of {HbA1c} measurement on hospital readmission rates: Analysis
+  of 70,000 clinical database patient records.
+\newblock \emph{BioMed Research International}, 2014:\penalty0 781670, 2014.
+\newblock \doi{10.1155/2014/781670}.
+
+\end{thebibliography}
