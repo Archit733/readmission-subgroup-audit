@@ -70,6 +70,13 @@ Batches 0-3 are clean; later batches get synthetic drift toward older patients p
 ## Running from any folder
 Paths in `config.yaml` resolve relative to the project folder, so a fresh `git clone` works wherever you run the scripts. The dataset is `data/diabetic_data.csv`.
 
+## Research extension: why the age gap exists (`research/`)
+A pre-registered, patient-level decomposition of the age gap (first encounter per patient, paired patient-level bootstrap).
+The gap survives, at about half the encounter-level size: AUC(40-59) - AUC(80+) = 0.044 [0.021, 0.066]. It is not
+explained by base rate, label definition, sample size or model capacity, and reweighting, band-specific models,
+finer ICD codes and geriatric flags do not close it. See `research/README.md`, `research/PLAN.md` and the paper draft
+`research/paper/draft.md`. Run with `cd research && bash run_all.sh` (about 25 minutes on 2 CPU cores).
+
 ## Docs
 * `docs/PROJECT_EXPLAINER.md`: the project start to end, component by component
 * `docs/PRESENTATION_SCRIPT.md`: 5-minute presenter script with likely questions
