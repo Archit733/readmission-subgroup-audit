@@ -3,3 +3,11 @@ __pycache__/
 .pytest_cache/
 .venv/
 reports/results/*.joblib
+
+# LaTeX build files
+research/paper/latex/*.aux
+research/paper/latex/*.log
+research/paper/latex/*.out
+research/paper/latex/*.blg
+research/paper/latex/*.fls
+research/paper/latex/*.fdb_latexmk

@@ -35,12 +35,28 @@
 ![Learning curves](figures/fig2_learning_curves.png)
 ![Interventions](figures/fig3_interventions.png)
 
+## Get it on your machine
+
+The repository is public and includes the dataset, so nothing else needs downloading (about 31 MB).
+
+```bash
+git clone https://github.com/Archit733/readmission-subgroup-audit.git
+cd readmission-subgroup-audit/research
+python3 -m venv .venv && source .venv/bin/activate     # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+To just read the work, no installation is needed: open `paper/preprint.pdf`, `PLAN.md` and the CSVs in `results/`.
+
 ## Run
 
 ```bash
-python3 -m pip install -r requirements.txt
-bash run_all.sh        # run from research/; reads ../data/diabetic_data.csv; about 25 minutes on 2 CPU cores
+bash run_all.sh                  # every number and figure, about 25 minutes on 2 CPU cores
+python3 scripts/01_leakage.py    # or one phase at a time (phase 1 takes about 7 minutes)
 ```
+
+Results are deterministic (fixed seeds): a fresh clone reproduces the committed numbers exactly.
+On Windows without bash, run the five scripts in `scripts/` in order with `python`.
 
 | Script | Phase | Main output |
 |---|---|---|
