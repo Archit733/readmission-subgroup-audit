@@ -97,7 +97,6 @@ ax.errorbar(rows["auc80_change"], yy, xerr=[rows["auc80_change"] - rows["auc80_c
 ax.axvline(0, color=INK2, lw=0.8)
 ax.set_yticks(yy, rows["label"], fontsize=8)
 ax.set_xlabel("Change in AUC for 80+ vs baseline (paired 95% CI)")
-ax.set_title("No intervention improves discrimination for 80+", loc="left", fontsize=10, color=INK)
 ax.grid(axis="y", visible=False)
 fig.text(0.01, 0.01, "* compared with the logistic-regression baseline", fontsize=7, color=INK2)
 fig.tight_layout()

@@ -272,16 +272,6 @@ Methodologically we follow the bias--variance--noise decomposition of \citet{che
 
 A readmission model with an overall AUC of 0.65 ranks patients aged 80 and over noticeably worse than middle-aged patients. About half of the gap seen in a standard encounter-level analysis is an artefact of repeat admissions. The remainder survives every check in a pre-specified plan, and more data, more capacity, band-specific models and finer diagnosis codes do not close it. The features in this dataset carry less information about which of the oldest patients will be readmitted. Closing the gap likely requires different data, such as functional status, frailty, social support and post-discharge mortality, rather than a different model. Until such data are available, results on this benchmark should report age-stratified AUCs and calibration slopes alongside the aggregate.
 
-\section*{Code and data availability}
-The data are public \citep{uci2014}. All code, the pre-registered plan with its commit history, the logged deviations and every results table are available at \url{https://github.com/Archit733/readmission-subgroup-audit} (folder \texttt{research/}). A single script, \texttt{run\_all.sh}, regenerates every number and figure in about 25 minutes on two CPU cores.
-
-\section*{Acknowledgements}
-AI assistance (Claude, Anthropic) was used for analysis code and drafting. The author reviewed the code, re-derived the headline results independently, and checked every reported number and reference.
-
-\bibliographystyle{plainnat}
-\bibliography{refs}
-
-\clearpage
 \appendix
 \section{Deviations from the pre-registered plan}
 \label{app:deviations}
@@ -332,5 +322,14 @@ $<$40 & 1.17\ci{0.98}{1.40} & 0.04 & 0.008 & 0.49 \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\section*{Code and data availability}
+The data are public \citep{uci2014}. All code, the pre-registered plan with its commit history, the logged deviations and every results table are available at \url{https://github.com/Archit733/readmission-subgroup-audit} (folder \texttt{research/}). A single script, \texttt{run\_all.sh}, regenerates every number and figure in about 25 minutes on two CPU cores.
+
+\section*{Acknowledgements}
+AI assistance (Claude, Anthropic) was used for analysis code and drafting. The author reviewed the code, re-derived the headline results independently, and checked every reported number and reference.
+
+\bibliographystyle{plainnat}
+\bibliography{refs}
 
 \end{document}
