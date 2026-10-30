@@ -2,6 +2,7 @@
 \documentclass{article}
 
 \usepackage{arxiv}
+\AtBeginDocument{\raggedbottom}
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -33,7 +34,7 @@
 
 \newcommand{\ci}[2]{\,\mbox{[#1,\,#2]}}
 
-\title{Readmission Models Discriminate Worse for the Oldest Patients, and Neither More Data nor a Bigger Model Closes the Gap: A Pre-Registered Patient-Level Audit of the Diabetes 130-US Hospitals Benchmark}
+\title{Readmission Models Discriminate Worse for the Oldest Patients: A Pre-Registered Patient-Level Audit of the Diabetes 130-US Hospitals Benchmark}
 
 \author{
   Archit Bhatia \\
@@ -51,7 +52,7 @@
 \maketitle
 
 \begin{abstract}
-Aggregate discrimination metrics can hide subgroup failures. We ask whether a standard 30-day readmission model discriminates equally well across age and, if not, why. On the UCI Diabetes 130-US Hospitals data (first encounter per patient, deaths and hospice discharges excluded; $n = 69{,}990$), logistic regression reaches an overall AUC of 0.648, but 0.647 for patients aged 40--59 and 0.603 for those aged 80 and over: a gap of 0.044 (paired patient-level bootstrap 95\% CI 0.021 to 0.066). LightGBM gives 0.036 (0.013 to 0.059). An encounter-level analysis roughly doubles the gap, mostly because repeat admitters are easy to predict, not because of train--test leakage. Following an analysis plan committed before any result was computed, we show that the remaining gap is not explained by outcome rarity, outcome definition, sample size (parallel learning curves; the gap persists at equal training size) or model capacity (four model classes, including explicit age-by-feature interactions). It is confined to the region of feature space occupied mainly by the oldest patients. Band-specific models, reweighting, finer diagnosis codes and geriatric-syndrome flags do not raise their AUC. Calibration-in-the-large holds at every age, but the calibration slope for the 80+ band is 0.72 (0.62 to 0.82). We conclude that the gap reflects missing information in these features rather than a deficiency of the learner, and that results on this benchmark should be reported with age-stratified discrimination and calibration.
+Aggregate discrimination metrics can hide subgroup failures. I ask whether a standard 30-day readmission model discriminates equally well across age and, if not, why. On the UCI Diabetes 130-US Hospitals data (first encounter per patient, deaths and hospice discharges excluded; $n = 69{,}990$), logistic regression reaches an overall AUC of 0.648, but 0.647 for patients aged 40--59 and 0.603 for those aged 80 and over: a gap of 0.044 (paired patient-level bootstrap 95\% CI 0.021 to 0.066). LightGBM gives 0.036 (0.013 to 0.059). An encounter-level analysis roughly doubles the gap, mostly because repeat admitters are easy to predict, not because of train--test leakage. Following an analysis plan committed before any result was computed, I show that the remaining gap is not explained by outcome rarity, outcome definition, sample size (parallel learning curves; the gap persists at equal training size) or model capacity (four model classes, including explicit age-by-feature interactions). It is confined to the region of feature space occupied mainly by the oldest patients. Band-specific models, reweighting, finer diagnosis codes and geriatric-syndrome flags do not raise their AUC. Calibration-in-the-large holds at every age, but the calibration slope for the 80+ band is 0.72 (0.62 to 0.82). I conclude that the gap reflects missing information in these features rather than a deficiency of the learner, and that results on this benchmark should be reported with age-stratified discrimination and calibration.
 \end{abstract}
 
 \keywords{Subgroup evaluation \and Hospital readmission \and Algorithmic fairness \and Older adults \and Pre-registration \and Clinical machine learning}
@@ -60,7 +61,7 @@ Aggregate discrimination metrics can hide subgroup failures. We ask whether a st
 
 Readmission risk models are usually summarised by a single AUC. If discrimination is materially worse for an identifiable group, the model's ranking of patients is least trustworthy where it is used, and the aggregate hides this. Older adults have the highest readmission rates and the most to gain or lose from risk stratification.
 
-An earlier version of this work, an encounter-level audit with a single random split, found a large AUC gap by age that survived a stronger model. It also proposed, and then retracted after direct tests, an explanation based on diagnosis complexity. That left a finding without an explanation. Here we replace that analysis with a pre-specified, patient-level study that asks three questions:
+This study grew out of a preliminary analysis I carried out as an unpublished course project. That analysis used an encounter-level design with a single random split. It found a large AUC gap by age that survived a stronger model, and proposed an explanation based on diagnosis complexity, which direct tests did not support and which was retracted. That left a finding without an explanation. Here I replace the preliminary analysis with a pre-specified, patient-level study (the methodological differences are listed in Appendix~\ref{app:changes}) that asks three questions:
 \begin{enumerate}
   \item Is discrimination lower for the oldest patients once the analysis is done at the patient level?
   \item If so, is the gap explained by cheap factors (base rate, outcome definition, case mix, discharge destination), by variance (too little data), or by bias (insufficient model capacity)? Or does it persist after all of these, pointing to features that carry less information about the oldest patients?
@@ -75,34 +76,9 @@ An earlier version of this work, an encounter-level audit with a single random s
   \item A null result: band-specific models, reweighting, finer ICD-9 codes and geriatric-syndrome flags do not close it.
 \end{enumerate}
 
-\section{Changes from the original audit}
-
-Table~\ref{tab:changes} lists every methodological change from the original audit. All results below come from the revised design.
-
-\begin{table}[h]
-\centering\small
-\caption{Methodological changes from the original audit.}
-\label{tab:changes}
-\begin{tabular}{@{}p{3.1cm}p{5.4cm}p{6.2cm}@{}}
-\toprule
-Aspect & Original audit & This study \\
-\midrule
-Unit of analysis & Encounters (101,766) & First encounter per patient (69,990) \\
-Exclusions & None & Deaths and hospice discharges, as in \citet{strack2014} \\
-Train/test design & One random 80/20 row split & 5-fold CV, grouped by patient, stratified by outcome $\times$ age band \\
-Uncertainty & Separate bootstrap per subgroup & Paired patient-level bootstrap; CI on the \emph{difference} \\
-Age groups & Ten 10-year buckets & Four bands fixed in advance: $<$40, 40--59, 60--79, 80+ \\
-Estimand & Best vs.\ worst bucket & $\Delta = \mathrm{AUC}_{40\text{--}59} - \mathrm{AUC}_{80+}$, fixed in advance \\
-Features & Integer-coded categoricals, raw ICD codes & One-hot categoricals, ICD-9 groups of \citet{strack2014}, top-15 specialty \\
-Analysis plan & Developed during analysis & Committed to git before any result; deviations logged \\
-Mechanism & Correlation over 9 age buckets (retracted) & Bias/variance/noise decomposition \citep{chen2018} and interventions \\
-\bottomrule
-\end{tabular}
-\end{table}
-
 \section{Data and methods}
 
-\paragraph{Data and cohort.} We use the UCI Diabetes 130-US Hospitals dataset \citep{uci2014}, which covers 1999--2008 and contains 101,766 encounters from 71,518 patients. We follow the cohort definition of its authors \citep{strack2014}: we exclude encounters ending in death (discharge codes 11, 19, 20, 21) or hospice discharge (13, 14), then keep each patient's first encounter. This leaves 69,990 patients; \citet{strack2014} report 69,984, and we have not traced the six-patient difference. The outcome is readmission within 30 days (8.98\%). Table~\ref{tab:cohort} gives the band sizes.
+\paragraph{Data and cohort.} I use the UCI Diabetes 130-US Hospitals dataset \citep{uci2014}, which covers 1999--2008 and contains 101,766 encounters from 71,518 patients. I follow the cohort definition of its authors \citep{strack2014}: I exclude encounters ending in death (discharge codes 11, 19, 20, 21) or hospice discharge (13, 14), then keep each patient's first encounter. This leaves 69,990 patients; \citet{strack2014} report 69,984, and I have not traced the six-patient difference. The outcome is readmission within 30 days (8.98\%). Table~\ref{tab:cohort} gives the band sizes.
 
 \begin{table}[h]
 \centering\small
@@ -122,12 +98,13 @@ All & 69,990 & 6,285 & 9.0\% \\
 \end{tabular}
 \end{table}
 
-\paragraph{Models and features.} We compare two models: logistic regression (LR), with one-hot categoricals and standardised numerics, and LightGBM \citep{ke2017} with 300 trees, learning rate 0.05 and 31 leaves. Both use the same 43 features: 9 numeric fields, including age as the bucket midpoint, and 34 categorical fields covering demographics, admission and discharge codes, medical specialty, the three ICD-9 diagnosis codes grouped into nine categories, laboratory flags and the diabetes medication fields. Implementation uses scikit-learn \citep{pedregosa2011}.
+\paragraph{Models and features.} I compare two models: logistic regression (LR), with one-hot categoricals and standardised numerics, and LightGBM \citep{ke2017} with 300 trees, learning rate 0.05 and 31 leaves. Both use the same 43 features: 9 numeric fields, including age as the bucket midpoint, and 34 categorical fields covering demographics, admission and discharge codes, medical specialty, the three ICD-9 diagnosis codes grouped into nine categories, laboratory flags and the diabetes medication fields. Implementation uses scikit-learn \citep{pedregosa2011}.
 
 \paragraph{Evaluation.} All metrics use out-of-fold predictions from 5-fold cross-validation, grouped by patient and stratified by outcome and age band. The primary estimand is
 \[
 \Delta = \mathrm{AUC}_{40\text{--}59} - \mathrm{AUC}_{80+}.
 \]
+The reference band, 40--59, was fixed in the analysis plan. It is preferred to a best-versus-worst comparison for two reasons: the youngest band is the smallest (4,500 patients, 300 readmissions) and its two lowest 10-year buckets contain almost no positives (3 and 26; Table~\ref{tab:decades}), so its AUC is the least precise; and choosing the comparison after seeing which band scores highest would inflate the gap. The maximum-minus-minimum AUC across all four bands is reported as a pre-specified secondary estimand.
 Uncertainty comes from a paired patient-level bootstrap with 2,000 replicates. Each replicate resamples patients once and evaluates every band and model on the same resample, so intervals for differences are valid even where per-band intervals overlap.
 
 \paragraph{Pre-registration.} The analysis plan fixed the cohort, bands, estimand, models, features and every decision rule used below. It was committed to the repository before any result was computed. Deviations, mostly added exploratory analyses, are logged with reasons in Appendix~\ref{app:deviations}.
@@ -136,7 +113,7 @@ Uncertainty comes from a paired patient-level bootstrap with 2,000 replicates. E
 
 \subsection{A patient-level analysis halves the gap but does not remove it}
 
-Table~\ref{tab:leakage} and Figure~\ref{fig:cohort} move from the original design to the primary cohort one change at a time.
+Table~\ref{tab:leakage} and Figure~\ref{fig:cohort} move from the design of the preliminary analysis (A) to the primary cohort (D), one change at a time.
 
 \begin{table}[h]
 \centering\small
@@ -154,9 +131,9 @@ D & First encounter per patient (primary) & \textbf{0.044}\ci{0.021}{0.066} & \t
 \end{tabular}
 \end{table}
 
-In design A, 41.6\% of test encounters belong to a patient who also appears in training. Grouping by patient nevertheless changes the gap little (A$\to$B). The reduction happens when we keep one encounter per patient (C$\to$D). Repeat admitters have many prior inpatient visits, which makes them easy to predict, and they inflate AUC most in the young bands. In the original audit, AUC was 0.81 for ages 20--29. In the primary cohort it is 0.70\ci{0.63}{0.76}, while ages 90--99 reach only 0.54\ci{0.50}{0.59} (Appendix Table~\ref{tab:decades}).
+In design A, 41.6\% of test encounters belong to a patient who also appears in training. Grouping by patient nevertheless changes the gap little (A$\to$B). The reduction happens when only one encounter per patient is kept (C$\to$D). Repeat admitters have many prior inpatient visits, which makes them easy to predict, and they inflate AUC most in the young bands. In the preliminary analysis, AUC was 0.81 for ages 20--29. In the primary cohort it is 0.70\ci{0.63}{0.76}, while ages 90--99 reach only 0.54\ci{0.50}{0.59} (Appendix Table~\ref{tab:decades}).
 
-In the primary cohort, AUC is roughly flat at about 0.64--0.66 from age 40 to 79 and falls after 80 (Table~\ref{tab:primary}). The gap is stable across five re-randomised CV splits: its standard deviation is 0.002 for LR and 0.004 for LightGBM.
+In the primary cohort, AUC is roughly flat at about 0.64--0.66 from age 40 to 79 and falls after 80 (Table~\ref{tab:primary}). The gap is stable across five re-randomised CV splits: its standard deviation is 0.002 for LR and 0.004 for LightGBM. The secondary estimand, the maximum-minus-minimum AUC across the four bands, is 0.077\ci{0.042}{0.113} for LR and 0.062\ci{0.031}{0.098} for LightGBM. It exceeds $\Delta$ because the $<$40 band has the highest point estimate, which is also the least precise (Table~\ref{tab:primary}).
 
 \begin{figure}[t]
 \centering
@@ -226,7 +203,7 @@ LightGBM (1,000 trees, 63 leaves) & 0.596 & 0.047\ci{0.025}{0.069} \\
 \end{tabular}
 \end{table}
 
-\paragraph{Noise (weak evidence).} Within each band, we fit $k$-nearest-neighbour classifiers to standardised features at matched sample size, as a proxy for how well the features separate outcomes. At $n = 12{,}871$, within-band $k$-NN AUC is lowest for 80+ at every $k$ (for $k = 100$: 0.556 vs.\ 0.582 for 40--59). At $n = 4{,}500$, the 80+ and 60--79 bands cannot be distinguished, so this evidence is weak.
+\paragraph{Noise (weak evidence).} Within each band, I fit $k$-nearest-neighbour classifiers to standardised features at matched sample size, as a proxy for how well the features separate outcomes. At $n = 12{,}871$, within-band $k$-NN AUC is lowest for 80+ at every $k$ (for $k = 100$: 0.556 vs.\ 0.582 for 40--59). At $n = 4{,}500$, the 80+ and 60--79 bands cannot be distinguished, so this evidence is weak.
 
 \paragraph{A recording ceiling as a candidate mechanism.} The dataset stores at most three diagnosis codes per encounter, and the diagnosis count is capped at 9. 54.2\% of 80+ patients are at the cap, compared with 37.4\% of 40--59 patients. The diagnosis count carries some signal in the 40--59 band (single-feature AUC 0.56) and none in the 80+ band (0.50). Permutation importance shows the same pattern: discharge destination and prior inpatient visits carry discrimination in every band, while diagnosis-derived features lose importance with age.
 
@@ -239,7 +216,7 @@ No intervention raised AUC for the 80+ band (Figure~\ref{fig:int}). The changes,
   \item full 3-digit ICD-9 codes and full medical specialty: LR $-0.002$, LightGBM $-0.028$;
   \item eight geriatric-syndrome flags derived from the recorded diagnoses (dementia, delirium, Parkinson's disease, fall-related fracture, pressure ulcer, malnutrition or dehydration, urinary tract infection, pneumonia or aspiration): LR $+0.001$, LightGBM $-0.001$.
 \end{itemize}
-One variant, LR with 80+ patients weighted by 5, reduced $\Delta$ to 0.029. It did so by lowering AUC for 40--59 (0.647 to 0.631) while leaving 80+ unchanged. We report it as levelling down, not as a fix.
+One variant, LR with 80+ patients weighted by 5, reduced $\Delta$ to 0.029. It did so by lowering AUC for 40--59 (0.647 to 0.631) while leaving 80+ unchanged. I report it as levelling down, not as a fix.
 
 \begin{figure}[t]
 \centering
@@ -250,21 +227,21 @@ One variant, LR with 80+ patients weighted by 5, reduced $\Delta$ to 0.029. It d
 
 \section{Related work}
 
-The closest prior work on this dataset is \citet{alzanbouri2024}. They use the same four age bands and report group fairness metrics (positive prediction rates, false discovery and false omission rates) for several classifiers. They do not report subgroup discrimination with intervals, a patient-level analysis, or an explanation of the differences.
+The closest prior work on this dataset is \citet{alzanbouri2024}. They use the same four age bands and report group fairness metrics (positive prediction rates, false discovery and false omission rates) for several classifiers. They do not report subgroup discrimination (AUC) with confidence intervals, do not describe a patient-level analysis, and do not attempt to explain the differences.
 
-Most other fairness work on this dataset concerns race. The Fairlearn version of the data \citep{fairlearn_diabetes} is encounter-level and bins age as 30 or younger, 30--60 and over 60. That binning merges the band where we find the deficit (80+) with one where we find none (60--79). Recent methods papers on the dataset target cross-racial fairness \citep{luxu2026}.
+Most other fairness work on this dataset concerns race. The Fairlearn version of the data \citep{fairlearn_diabetes} is encounter-level and bins age as 30 or younger, 30--60 and over 60. That binning merges the band with the deficit (80+) with one without it (60--79). Recent methods papers on the dataset target cross-racial fairness \citep{luxu2026}.
 
-More broadly, readmission models discriminate only modestly. A systematic review found c-statistics from 0.55 to 0.83, with few above 0.70, and noted that functional and social variables, rarely present in administrative data, improve discrimination \citep{kansagara2011}. In older inpatients, frailty and social support add discrimination beyond clinical variables \citep{sokoreli2019,kahlon2015}, consistent with our reading that the 80+ deficit reflects missing information.
+More broadly, readmission models discriminate only modestly. A systematic review found c-statistics from 0.55 to 0.83, with few above 0.70, and noted that functional and social variables, rarely present in administrative data, improve discrimination \citep{kansagara2011}. In older inpatients, frailty and social support add discrimination beyond clinical variables \citep{sokoreli2019,kahlon2015}, consistent with the reading that the 80+ deficit reflects missing information.
 
-Methodologically we follow the bias--variance--noise decomposition of \citet{chen2018}. The study is motivated by documented subgroup failures of clinical algorithms \citep{obermeyer2019,seyyed2021}.
+Methodologically, the study follows the bias--variance--noise decomposition of \citet{chen2018}. The study is motivated by documented subgroup failures of clinical algorithms \citep{obermeyer2019,seyyed2021}.
 
 \section{Limitations}
 
 \begin{itemize}
-  \item \emph{Competing mortality.} Deaths in hospital and hospice discharges are excluded, but deaths after discharge are not recorded. Some elderly patients labelled ``not readmitted'' may have died within 30 days. This adds label noise exactly where we observe the deficit, and it is the most important untested explanation.
+  \item \emph{Competing mortality.} Deaths in hospital and hospice discharges are excluded, but deaths after discharge are not recorded. Some elderly patients labelled ``not readmitted'' may have died within 30 days. This adds label noise exactly where the deficit appears, and it is the most important untested explanation.
   \item \emph{Age resolution and confounding.} Age is recorded only in 10-year buckets, and it is confounded with care setting: the case-mix and destination analyses place the deficit where old age and nursing-facility discharge coincide.
   \item \emph{The noise interpretation.} The $k$-NN estimate depends on the feature representation. ``Noise'' here is the explanation left after variance and capacity are ruled out, not a direct measurement.
-  \item \emph{External validity.} The data are from 1999--2008, from US hospitals, and cover diabetic encounters only. We have not replicated the result on a second dataset.
+  \item \emph{External validity.} The data are from 1999--2008, from US hospitals, and cover diabetic encounters only. I have not replicated the result on a second dataset.
   \item \emph{Bootstrap scope.} The confidence intervals treat the out-of-fold predictions as fixed. Variability across re-randomised splits is reported separately (standard deviation of $\Delta$ 0.002 to 0.004).
 \end{itemize}
 
@@ -283,6 +260,29 @@ None of these deviations changes a pre-specified estimand, threshold or decision
   \item $k$-NN used $k \in \{10, 25, 50, 100\}$ instead of $\{5, 10, 25\}$, because with an outcome rate of 7--11\%, $k = 5$ leaves almost no positives in a neighbourhood. The analysis was run at two matched sample sizes.
   \item Single-feature AUCs, the diagnosis-ceiling check and the geriatric-syndrome flags were added and are labelled exploratory.
 \end{enumerate}
+
+\section{Differences from the preliminary analysis}
+\label{app:changes}
+\begin{table}[H]
+\centering\small
+\caption{Methodological differences between the preliminary analysis (an unpublished course project) and this study.}
+\label{tab:changes}
+\begin{tabular}{@{}p{3.1cm}p{5.4cm}p{6.2cm}@{}}
+\toprule
+Aspect & Preliminary analysis & This study \\
+\midrule
+Unit of analysis & Encounters (101,766) & First encounter per patient (69,990) \\
+Exclusions & None & Deaths and hospice discharges, as in \citet{strack2014} \\
+Train/test design & One random 80/20 row split & 5-fold CV, grouped by patient, stratified by outcome $\times$ age band \\
+Uncertainty & Separate bootstrap per subgroup & Paired patient-level bootstrap; CI on the \emph{difference} \\
+Age groups & Ten 10-year buckets & Four bands fixed in advance: $<$40, 40--59, 60--79, 80+ \\
+Estimand & Best vs.\ worst bucket & $\Delta = \mathrm{AUC}_{40\text{--}59} - \mathrm{AUC}_{80+}$, fixed in advance \\
+Features & Integer-coded categoricals, raw ICD codes & One-hot categoricals, ICD-9 groups of \citet{strack2014}, top-15 specialty \\
+Analysis plan & Developed during analysis & Committed to git before any result; deviations logged \\
+Mechanism & Correlation over 9 age buckets (retracted) & Bias/variance/noise decomposition \citep{chen2018} and interventions \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \section{AUC by 10-year bucket}
 \begin{table}[H]
